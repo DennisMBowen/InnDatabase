@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 import model.HotelRoom;
 
@@ -19,7 +21,7 @@ public class HotelRoomHelper {
 	//Create global instance of EntityFactoryManager
 	static EntityManagerFactory emfactory = Persistence.createEntityManagerFactory("InnDatabase");
 		
-	//Method to accept a ListItem to add
+	//Method to accept a Hotel Room to add
 	public void insertItem (HotelRoom hr) {
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
@@ -114,16 +116,22 @@ public class HotelRoomHelper {
 	 * @param roomNumber
 	 * @return
 	 */
-	public HotelRoom findHotelRoomNumber(int roomNumber) {
+	public HotelRoom findHotelRoomByRoomNumber(int roomNumber) {
 		// TODO Auto-generated method stub
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		HotelRoom foundRoom = em.find(HotelRoom.class, roomNumber);
-		em.getTransaction().commit();
+		TypedQuery<HotelRoom> typedQuery = em.createQuery("select room from HotelRoom room where room.roomNumber= :selectedRoomNumber", HotelRoom.class);
+		typedQuery.setParameter("selectedRoomNumber", roomNumber);
+		typedQuery.setMaxResults(1);
+		
+		HotelRoom foundRoom;
+		try {
+			foundRoom = typedQuery.getSingleResult();
+		} catch (NoResultException ex) {
+			foundRoom = new HotelRoom();
+		}
 		em.close();
 		return foundRoom;
-	}
-	
-	
+	}	
 	
 }

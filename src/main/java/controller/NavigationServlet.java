@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Customer;
 import model.HotelRoom;
 
 /**
@@ -39,22 +40,56 @@ public class NavigationServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		HotelRoomHelper hrh = new HotelRoomHelper();
+		CustomerHelper ch = new CustomerHelper();
 		String act = request.getParameter("doThisToItem");
 		
 		String path = "/viewAllRoomsServlet";
 		
-		if (act.equals("delete")) {
-			Integer roomId = Integer.parseInt(request.getParameter("id"));
-			hrh.deleteRoom(roomId);
-			
-		} else if (act.equals("add")){
+		if (act.equals("Delete Room")) {
+			try {
+				Integer roomId = Integer.parseInt(request.getParameter("id"));
+				hrh.deleteRoom(roomId);
+			} catch (NumberFormatException e) {
+				System.out.println("Forgot to select room");
+			}
+		} else if (act.equals("Add Room")){
 			path = "/index.html";
 			
-		} else if (act.equals("modify")) {
-			Integer roomId = Integer.parseInt(request.getParameter("id"));
-			HotelRoom roomToEdit = hrh.findHotelRoom(roomId);
-			request.setAttribute("roomToEdit", roomToEdit);
-			path = "/edit-room.jsp";
+		} else if (act.equals("Modify Room")) {
+			try {
+				Integer roomId = Integer.parseInt(request.getParameter("id"));
+				HotelRoom roomToEdit = hrh.findHotelRoom(roomId);
+				request.setAttribute("roomToEdit", roomToEdit);
+				path = "/edit-room.jsp";
+			} catch (NumberFormatException e) {
+				System.out.println("Forgot to select room");
+			}
+			
+		} else if (act.equals("Add Guest")) {
+			try {
+				Integer roomId = Integer.parseInt(request.getParameter("id"));
+				HotelRoom guestRoom = hrh.findHotelRoom(roomId);
+				request.setAttribute("guestRoom", guestRoom);
+				path = "/add-customer.jsp";
+			} catch (NumberFormatException e) {
+				System.out.println("Forgot to select room");
+			}
+			
+		} else if (act.equals("Remove Guest")) {
+			try {
+				Integer roomId = Integer.parseInt(request.getParameter("id"));
+				HotelRoom guestRoom = hrh.findHotelRoom(roomId);
+				Customer customer = ch.findGuest(guestRoom.getGuest().getId());
+				customer.setRoom(null);
+				guestRoom.setGuest(null);
+				hrh.updateRoom(guestRoom);
+				ch.updateCustomer(customer);
+			} catch (NumberFormatException e) {
+				System.out.println("Forgot to select room");
+			}
+			
+		} else if(act.equals("View Customer Database")) {
+			path = "/viewAllCustomersServlet";
 		}
 		
 		

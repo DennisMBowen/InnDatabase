@@ -7,19 +7,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.Customer;
 import model.HotelRoom;
 
 /**
- * Servlet implementation class EditRoomServlet
+ * Servlet implementation class AddCustomerServlet
  */
-@WebServlet("/editRoomServlet")
-public class EditRoomServlet extends HttpServlet {
+@WebServlet("/addCustomerServlet")
+public class AddCustomerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EditRoomServlet() {
+    public AddCustomerServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,20 +37,24 @@ public class EditRoomServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		HotelRoomHelper hrh = new HotelRoomHelper();
+		CustomerHelper ch = new CustomerHelper();
 		
-		String stringNumberOfBeds = request.getParameter("numberOfBeds");
-		int numberOfBeds = Integer.parseInt(stringNumberOfBeds);
-		String bedSize = request.getParameter("bedSize");
+		// TODO Auto-generated method stub
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String phoneNumber = request.getParameter("phoneNumber");
+		String email = request.getParameter("email");
+		
 		String stringRoomId = request.getParameter("id");
 		int roomId = Integer.parseInt(stringRoomId);
+		HotelRoom customerRoom = hrh.findHotelRoom(roomId);
 		
-		HotelRoom roomToEdit = hrh.findHotelRoom(roomId);
-		roomToEdit.setNumberOfBeds(numberOfBeds);
-		roomToEdit.setBedSize(bedSize);
+		Customer newCustomer = new Customer(firstName, lastName, phoneNumber, email, customerRoom);
+		ch.insertCustomer(newCustomer);
 		
-		hrh.updateRoom(roomToEdit);
+		customerRoom.setGuest(newCustomer);
+		hrh.updateRoom(customerRoom);
 		
 		getServletContext().getRequestDispatcher("/viewAllRoomsServlet").forward(request, response);
 	}

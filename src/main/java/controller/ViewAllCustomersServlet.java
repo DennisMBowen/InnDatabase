@@ -7,19 +7,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.HotelRoom;
-
 /**
- * Servlet implementation class EditRoomServlet
+ * Servlet implementation class ViewAllCustomersServlet
  */
-@WebServlet("/editRoomServlet")
-public class EditRoomServlet extends HttpServlet {
+@WebServlet("/viewAllCustomersServlet")
+public class ViewAllCustomersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EditRoomServlet() {
+    public ViewAllCustomersServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,7 +27,11 @@ public class EditRoomServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		CustomerHelper ch = new CustomerHelper();
+		
+		request.setAttribute("allCustomers", ch.showAllCustomers());
+		String path = "/customers.jsp";
+		getServletContext().getRequestDispatcher(path).forward(request, response);
 	}
 
 	/**
@@ -37,21 +39,7 @@ public class EditRoomServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HotelRoomHelper hrh = new HotelRoomHelper();
-		
-		String stringNumberOfBeds = request.getParameter("numberOfBeds");
-		int numberOfBeds = Integer.parseInt(stringNumberOfBeds);
-		String bedSize = request.getParameter("bedSize");
-		String stringRoomId = request.getParameter("id");
-		int roomId = Integer.parseInt(stringRoomId);
-		
-		HotelRoom roomToEdit = hrh.findHotelRoom(roomId);
-		roomToEdit.setNumberOfBeds(numberOfBeds);
-		roomToEdit.setBedSize(bedSize);
-		
-		hrh.updateRoom(roomToEdit);
-		
-		getServletContext().getRequestDispatcher("/viewAllRoomsServlet").forward(request, response);
+		doGet(request, response);
 	}
 
 }

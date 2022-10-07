@@ -1,9 +1,11 @@
 package model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -30,9 +32,9 @@ public class HotelRoom {
 	private String bedSize;
 	@Column(name = "Vacancy")
 	private boolean isVacant;
+	private Customer guest;
 	
 	//Getters and Setters
-	
 	public int getId() {
 		return id;
 	}
@@ -74,19 +76,29 @@ public class HotelRoom {
 		this.isVacant = isVacant;
 	}
 	
+	public Customer getGuest() {
+		return guest;
+	}
+
+	public void setGuest(Customer guest) {
+		this.guest = guest;
+	}
+	
 
 	//Default No_arg Constructor
 	public HotelRoom() {
 		
 	}
 	
-	//Constructor that uses parameters
+	//Constructor that uses parameters without the Guest
 	public HotelRoom(int roomNumber, int numberOfBeds, String bedSize, boolean isVacant) {
 		this.roomNumber = roomNumber;
 		this.numberOfBeds = numberOfBeds;
 		this.bedSize = bedSize;
 		this.isVacant = isVacant;
 	}
+	
+	
 	
 	public String displayRoomDetails() {
 			return "Room Number " + this.roomNumber + ": " + this.numberOfBeds + " " + this.bedSize + " bed(s), Vacancy: " + this.isVacant;
