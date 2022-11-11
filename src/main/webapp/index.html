@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Inn Database</title>
+	<meta charset="UTF-8">
+	<title>Inn Database</title>
+	<script defer src="index.js"></script>
 </head>
 <body>
-	<form action = "addRoomServlet" method = "post">
-	Room Number: <input type = "text" name = "roomNumber">
-	Number of Beds: <input type = "text" name = "numberOfBeds">
-	Bed Size: <input type = "text" name = "bedSize">
-	Vacancy(y/n): <input type = "text" name = "isVacant">
+	<div id ="error"></div>
+	<form id = "form" action = "addRoomServlet" method = "post">
+	<div>
+		<label for="roomNumber">Room Number</label>
+		<input id = "roomNumber" name = "roomNumber" type = "text">
+		<label for="numberOfBeds">Number of Beds: </label>
+		<input id = "numberOfBeds" name = "numberOfBeds" type = "text">
+		<label for="bedSize">Bed Size: </label>
+		<input id = "bedSize" name = "bedSize" type = "text">
+		<label for="isVacant"> Vacancy (y/n) </label>
+		<input id = "isVacant" name = "isVacant" type = "text">
+	</div>
  	<input type = "submit" value = "Add Room">
  </form> <br/>
  <a href = "viewAllRoomsServlet"> View all rooms</a>
